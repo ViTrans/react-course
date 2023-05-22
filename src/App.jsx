@@ -1,10 +1,10 @@
 import "./App.css";
-import Form from "./components/form/Form";
+import MovieSearchApp from "./components/movieSearch/MovieSearchApp";
 
 function App() {
   return (
     <div>
-      <Form></Form>
+      <MovieSearchApp></MovieSearchApp>
     </div>
   );
 }
