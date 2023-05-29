@@ -1,7 +1,9 @@
-import { useForm } from "react-hook-form";
+/* eslint-disable react/prop-types */
+import { useForm, Controller, useController } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import { useEffect } from "react";
+
 const schema = Yup.object({
   fristName: Yup.string()
     .max(20, "vui long khong nhap qua 20 ky tu")
@@ -18,13 +20,14 @@ const FormSignup = () => {
     reset,
     setFocus,
     setValue,
+    control,
     formState: { errors, isSubmitting, isValid },
   } = useForm({
     resolver: yupResolver(schema),
   });
   const watchShowAge = watch("showAge", false);
 
-  const onSubmit = async (data) => {
+  const onSubmit = async () => {
     if (isValid) {
       console.log("send data to backend");
       reset({
@@ -46,30 +49,22 @@ const FormSignup = () => {
       className="w-full max-w-[500px] mx-auto mt-5"
     >
       <div className="flex flex-col gap-2 mb-5">
-        <label htmlFor="">FristName</label>
-        <input
-          type="text"
-          {...register("fristName")}
-          className="p-4 border border-gray-100 rounded-md"
-        />
-        {errors?.fristName?.message && (
-          <span className="text-sm text-red-500">
-            {errors.fristName.message}
-          </span>
-        )}
+        <label htmlFor="fristname">FristName</label>
+        <MyInput
+          id="fristname"
+          placeholder="enter your fristname"
+          name="FirstName"
+          control={control}
+        ></MyInput>
       </div>
       <div className="flex flex-col gap-2 mb-5">
-        <label htmlFor="">LastName</label>
-        <input
-          type="text"
-          {...register("lastName")}
-          className="p-4 border border-gray-100 rounded-md"
-        />
-        {errors?.lastName?.message && (
-          <span className="text-sm text-red-500">
-            {errors.lastName.message}
-          </span>
-        )}
+        <label htmlFor="lastname">LastName</label>
+        <MyInput
+          name="lastName"
+          id="lastname"
+          placeholder="enter your lastname"
+          control={control}
+        ></MyInput>
       </div>
       <input type="checkbox" {...register("showAge")} />
       {watchShowAge && (
@@ -95,6 +90,38 @@ const FormSignup = () => {
         </button>
       </div>
     </form>
+  );
+};
+// const MyInput = ({ control, ...props }) => {
+//   return (
+//     <Controller
+//       name={props.name}
+//       control={control}
+//       defaultValue=""
+//       render={({ field }) => (
+//         <input
+//           {...field}
+//           {...props}
+//           className="p-4 border border-gray-100 rounded-md"
+//         ></input>
+//       )}
+//     ></Controller>
+//   );
+// };
+
+const MyInput = ({ control, ...props }) => {
+  const { field } = useController({
+    control,
+    name: props.name,
+    defaultValue: "",
+  });
+  console.log(field);
+  return (
+    <input
+      {...field}
+      {...props}
+      className="p-4 border border-gray-100 rounded-md"
+    ></input>
   );
 };
 
