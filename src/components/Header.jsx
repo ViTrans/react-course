@@ -1,10 +1,34 @@
 import { useContext } from "react";
 import { AuthContext } from "../contexts/authContext";
+import { NavLink } from "react-router-dom";
+
+const ListLink = [
+  {
+    id: 1,
+    to: "/homePage",
+    title: "Home",
+  },
+  {
+    id: 2,
+    to: "/Blog",
+    title: "Blog",
+  },
+  {
+    id: 3,
+    to: "/About",
+    title: "About",
+  },
+  {
+    id: 4,
+    to: "/Contact",
+    title: "Contact",
+  },
+];
 
 const Header = () => {
-  const { user, setUser } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
   return (
-    <div className="flex items-center justify-center p-4 bg-white shadow-md">
+    <div className="flex items-center justify-center p-4 bg-white shadow-md gap-x-5">
       {user ? (
         <div className="flex items-center gap-x-3">
           <img
@@ -19,12 +43,17 @@ const Header = () => {
       ) : (
         <span>Wellcome back !</span>
       )}
-      <button
-        onClick={() => setUser(null)}
-        className="inline-flex items-center justify-center px-8 py-4 font-sans font-semibold tracking-wide text-white bg-blue-500 rounded-lg h-[60px]"
-      >
-        logout
-      </button>
+      <div className="flex items-center justify-center gap-x-5">
+        {ListLink.map((link) => (
+          <NavLink
+            key={link.id}
+            to={link.to}
+            className={({ isActive }) => (isActive ? "text-blue-500" : "")}
+          >
+            {link.title}
+          </NavLink>
+        ))}
+      </div>
     </div>
   );
 };
